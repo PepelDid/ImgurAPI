@@ -37,7 +37,6 @@ public class AccountTests extends BaseTest{
                 .prettyPeek()
                 .then()
                 .statusCode(200);
-
     }
 
     @Test
