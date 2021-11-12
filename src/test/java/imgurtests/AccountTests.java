@@ -11,7 +11,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 
 @Story("4 account Tests")
-public class AccountTests extends BaseTest{
+public class AccountTests extends BaseTest {
 
     @Test
     void getAccountInfoTest(){
