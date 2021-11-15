@@ -22,8 +22,8 @@ public abstract class  BaseTest {
 
     @BeforeAll
     static void beforeAll(){
-       // RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-       // RestAssured.filters(new AllureRestAssured());
+        // RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+        // RestAssured.filters(new AllureRestAssured());
         /* это я закомментила на всякий случай,потому что у меня проблемы с плагином surefire, при тесте с правой панели:
         [INFO] --- maven-surefire-plugin:3.0.0-M5:test (default-cli) @ ImgurAPI ---
         [WARNING] Error injecting: org.apache.maven.plugin.surefire.SurefirePlugin
