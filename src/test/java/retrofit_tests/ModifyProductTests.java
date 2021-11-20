@@ -1,8 +1,10 @@
 package retrofit_tests;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import retrofit.db.model.Products;
 import retrofit.dto.Product;
-import retrofit.enums.CategoryType;
+import retrofit.utils.DbUtils;
 import retrofit.utils.PrettyLogger;
 import retrofit2.Response;
 
@@ -12,6 +14,25 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 public class ModifyProductTests extends BaseTests {
+
+
+    @Test
+    void modifyProductByBdMethodTest(){
+        Products record = new Products();
+        record.setId(Long.valueOf(idProduct));
+        record.setTitle(faker.food().vegetable());
+        record.setPrice((int)((Math.random() + 1) + 100));
+        record.setCategory_id(2l);
+        DbUtils.updateProductByKey(record);
+    //обратилась к обновленному продукту для проверок
+        Products updatedProductFromDB = DbUtils.selectByPrimaryKey(productsMapper, (Long.valueOf(idProduct)));
+    //проверила
+        assertThat(record.getId(), equalTo((Long.valueOf(updatedProductFromDB.getId()))));
+        assertThat(record.getTitle(), equalTo(updatedProductFromDB.getTitle()));
+        assertThat(record.getPrice(), equalTo(updatedProductFromDB.getPrice()));
+    //удалила
+        DbUtils.deleteProductByKey(productsMapper, record.getId());
+    }
 
     @Test
     void modifyProductByIdTest() throws IOException {
@@ -29,7 +50,10 @@ public class ModifyProductTests extends BaseTests {
         assertThat(response.body().getId(), equalTo(idProduct));
         assertThat(response.body().getPrice(), equalTo(500));
 
-//Лог такой(прописала в нем все для наглядности,айдишник наследуется обновлением)
+        Long id = Long.valueOf(idProduct);
+        DbUtils.deleteProductByKey(productsMapper, id);
+
+//Когда выдает 500, лог такой(прописала в нем все для наглядности,айдишник наследуется обновлением)
 //INFO: <-- 201 http://80.78.248.82:8189/market/api/v1/products (271ms, unknown-length body)
 //ноя 15, 2021 8:53:52 PM okhttp3.internal.platform.Platform log
 //This is idProduct 14165
@@ -42,4 +66,5 @@ public class ModifyProductTests extends BaseTests {
 //ноя 15, 2021 8:53:53 PM okhttp3.internal.platform.Platform log
 //INFO: Response{protocol=http/1.1, code=500, message=, url=http://80.78.248.82:8189/market/api/v1/products}48.82:8189/market/api/v1/products}
     }
+
 }

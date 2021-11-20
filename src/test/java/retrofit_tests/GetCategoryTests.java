@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import retrofit.dto.Category;
 import retrofit.dto.Product;
 import retrofit.enums.CategoryType;
+import retrofit.utils.DbUtils;
 import retrofit.utils.PrettyLogger;
 import retrofit2.Response;
 
@@ -15,31 +16,40 @@ import static org.hamcrest.core.IsEqual.equalTo;
 public class GetCategoryTests extends BaseTests{
     @Test
     void getCategoryByIdTest() throws IOException {
-        Integer id = CategoryType.FOOD.getId();
-        Response<Category> response = categoryService.getCategory(id).execute();
+        Integer idCat = CategoryType.FOOD.getId();
+        Response<Category> response = categoryService.getCategory(idCat).execute();
 
         PrettyLogger.DEFAULT.log(response.body().toString());
 
         assertThat(response.body().getTitle(), equalTo(CategoryType.FOOD.getTitle()));
-        assertThat(response.body().getId(), equalTo(id));
+        assertThat(response.body().getId(), equalTo(idCat));
+
+        Long id = Long.valueOf(idProduct);
+        DbUtils.deleteProductByKey(productsMapper, id);
     }
 
     @Test
     void getCategoryByWrongIdTest() throws IOException {
-        Integer id = 5;
-        Response response = categoryService.getCategory(id).execute();
+        Integer idCat = 5;
+        Response response = categoryService.getCategory(idCat).execute();
         PrettyLogger.DEFAULT.log(response.toString());
 
         assertThat(response.code(), equalTo(404));
+
+        Long id = Long.valueOf(idProduct);
+        DbUtils.deleteProductByKey(productsMapper, id);
     }
 
     @Test
     void getCategoryByNegativeIdTest() throws IOException {
-        Integer id = -7;
-        Response response = categoryService.getCategory(id).execute();
+        Integer idCat = -7;
+        Response response = categoryService.getCategory(idCat).execute();
         PrettyLogger.DEFAULT.log(response.toString());
 
         assertThat(response.code(), equalTo(404));
+
+        Long id = Long.valueOf(idProduct);
+        DbUtils.deleteProductByKey(productsMapper, id);
     }
 
     @Test
@@ -49,5 +59,8 @@ public class GetCategoryTests extends BaseTests{
 
         assertThat(response.body().getCategoryTitle(), equalTo(CategoryType.FOOD.getTitle()));
         assertThat(response.body().getId(), equalTo(idProduct));
+
+        Long id = Long.valueOf(idProduct);
+        DbUtils.deleteProductByKey(productsMapper, id);
     }
 }
